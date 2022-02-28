@@ -1,12 +1,13 @@
 import datetime
 
-from flask import Flask, render_template, redirect, request, make_response, session, abort
+from flask import Flask, render_template, redirect, request, make_response, session, abort, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms.news import NewsForm
 from data import db_session
 from data.news import News
 from data.users import User
 from forms.user import RegisterForm, LoginForm
+from data import db_session, news_api
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -15,6 +16,11 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(
     days=365
 )
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 @app.route('/news/<int:id>', methods=['GET', 'POST'])
@@ -82,7 +88,7 @@ def login():
 def main():
     db_session.global_init("db/blogs.db")
     db_sess = db_session.create_session()
-
+    app.register_blueprint(news_api.blueprint)
     app.run()
 
 
