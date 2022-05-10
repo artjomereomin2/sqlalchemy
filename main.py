@@ -7,7 +7,7 @@ from data import db_session
 from data.news import News
 from data.users import User
 from forms.user import RegisterForm, LoginForm
-from data import db_session, news_api
+from data import db_session, news_api, user_api
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -89,6 +89,7 @@ def main():
     db_session.global_init("db/blogs.db")
     db_sess = db_session.create_session()
     app.register_blueprint(news_api.blueprint)
+    app.register_blueprint(user_api.blueprint)
     app.run()
 
 
