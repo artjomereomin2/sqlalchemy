@@ -29,11 +29,11 @@ def get_users():
 def get_one_user(user_id):
     db_sess = db_session.create_session()
     users = db_sess.query(User).get(user_id)
-    if not news:
+    if not users:
         return jsonify({'error': 'Not found'})
     return jsonify(
         {
-            'users': news.to_dict(only=(
+            'users': users.to_dict(only=(
                 'name', 'about', 'email'))
         }
     )
@@ -80,7 +80,7 @@ def put_user(user_id):
 def delete_user(user_id):
     db_sess = db_session.create_session()
     user = db_sess.query(User).get(user_id)
-    if not news:
+    if not users:
         return jsonify({'error': 'Not found'})
     db_sess.delete(user)
     db_sess.commit()
